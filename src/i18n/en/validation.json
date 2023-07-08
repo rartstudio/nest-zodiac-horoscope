@@ -1,0 +1,42 @@
+{
+  "email": {
+    "isNotEmpty": "Email is required",
+    "isEmail": "Email must be valid",
+    "maxLength": "Email can't more than 100 characters"
+  },
+  "username": {
+    "isString": "Username must be a text",
+    "isNotEmpty": "Username must be valid",
+    "maxLength": "Username can't more than 100 characters"
+  },
+  "name": {
+    "isNotEmpty": "Name is required",
+    "maxLength": "Name can't more than 50 characters"
+  },
+  "password": {
+    "matches": "Password must contain uppercase, lowercase, numbers and symbols",
+    "minLength": "Password must be at least 8 letters long",
+    "maxLength": "Password cannot be more than 20 characters",
+    "isNotEmpty": "Password is required"
+  },
+  "countyCode": {
+    "isNotEmpty": "Country code is required"
+  },
+  "phoneNumber": {
+    "isNotEmpty": "Phone number is required",
+    "maxLength": "Phone number cannot be more than 17 digit"
+  },
+  "passwordConfirm": {
+    "match": "Password not same"
+  },
+  "token": {
+    "isNotEmpty": "Token is required"
+  },
+  "userId": {
+    "isNotEmpty": "User id is required"
+  },
+  "otp": {
+    "isNotEmpty": "OTP is required",
+    "minLength": "OTP must be six digit"
+  }
+}

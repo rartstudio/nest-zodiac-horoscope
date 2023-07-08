@@ -1,0 +1,14 @@
+{
+  "singleQuote": true,
+  "trailingComma": "all",
+  "semi": true,
+  "overrides": [
+    {
+      "files": "*.type.ts",
+      "options": {
+        "trailingComma": "all",
+        "semi": false,
+      }
+    }
+  ]
+}

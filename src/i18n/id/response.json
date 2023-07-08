@@ -1,0 +1,121 @@
+{
+  "auth": {
+    "route": {
+      "verifyResetPassword": {
+        "success": "Token reset password terverifikasi",
+        "error": {
+          "global": "Token reset password tidak valid"
+        }
+      },
+      "resetPassword": {
+        "success": "Sukses reset password"
+      },
+      "refreshToken": {
+        "success": "Sukses refresh token"
+      },
+      "register": {
+        "success": "Sukses Registrasi",
+        "error": {
+          "username": "Username sudah digunakan",
+          "email":"Email sudah terdaftar"
+        }
+      },
+      "otp": {
+        "success": {
+          "get": "Sukses verifikasi akun",
+          "post": "Akun terverifikasi"
+        },
+        "error": {
+          "otp": "OTP salah"
+        }
+      },
+      "login": {
+        "success": "Login Sukses",
+        "error": {
+          "username": "Username atau Password tidak cocok"
+        }
+      },
+      "forgotPassword": {
+        "success": "Sukses mengirim email reset password",
+        "error": {
+          "email": "Email tidak terdaftar"
+        }
+      }
+    }
+  },
+  "posts": {
+    "guard": {
+      "exist": "Post tidak ditemukan"
+    },
+    "route": {
+      "all": {
+        "success": {
+          "get": "Sukses mengambil kumpulan post",
+          "post": "Sukses menambahkan post"
+        }
+      },
+      "detail": {
+        "success": {
+          "get": "Sukses mengambil post"
+        }
+      }
+    }
+  },
+  "user": {
+    "guard": {
+      "exist": "Pengguna tidak terdaftar",
+      "userPostExist": "Post pengguna tidak ditemukan",
+      "userPostCommentExist": "Post komen pengguna tidak ditemukan",
+      "userPostLikeUnique": "Post like pengguna hanya bisa satu per post"
+    },
+    "route": {
+      "posts": {
+        "success": {
+          "get": "Sukses mengambil post pengguna"
+        }
+      },
+      "postsLike": {
+        "success": "Sukses menambahkan like pada post"
+      },
+      "postsDislike": {
+        "success": "Sukses menghapus like pada post"
+      },
+      "postsComments": {
+        "success": "Sukses menambahkan komen pada post"
+      },
+      "postsCommentsDetail": {
+        "success": {
+          "delete": "Sukses menghapus komen pada post"
+        }
+      },
+      "email": {
+        "success": "Sukses mengganti email pengguna",
+        "error": {
+          "otp" : "OTP tidak sah",
+          "email": "Email sudah terdaftar"
+        }
+      },
+      "password": {
+        "success": "Sukses mengubah password pengguna",
+        "error": {
+          "currentPassword": "Password sebelumnya tidak sama"
+        }
+      },
+      "attachment": {
+        "success": "Sukses mengubah foto profil pengguna"
+      },
+      "changeEmailOtp": {
+        "success": "Sukses mengirim otp mengganti email",
+        "error": {
+          "email": "Email sudah terdaftar"
+        }
+      },
+      "me": {
+        "success": "Sukses mengambil data pengguna"
+      },
+      "profile": {
+        "success": "Sukses mengubah profil pengguna"
+      }
+    }
+  } 
+}

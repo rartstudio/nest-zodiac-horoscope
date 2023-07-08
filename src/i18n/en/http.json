@@ -1,0 +1,9 @@
+{
+  "notFound": "Not Found",
+  "forbidden": "Resource access is restricted",
+  "unauthorized": "Invalid token",
+  "unprocessableContent": "Data cannot be processed",
+  "conflict": "Conflict Data",
+  "badRequest": "",
+  "internalServerError": "Internal server error"
+}

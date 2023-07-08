@@ -1,0 +1,37 @@
+{
+  "email": {
+    "isNotEmpty": "Email harus diisi",
+    "isEmail": "Email harus valid",
+    "maxLength": "Email tidak boleh lebih dari 100 karakter"
+  },
+  "username": {
+    "isNotEmpty": "Nama pengguna harus diisi",
+    "maxLength": "Nama pengguna tidak boleh lebih dari 100 karakter"
+  },
+  "name": {
+    "isNotEmpty": "Nama harus diisi",
+    "maxLength": "Nama tidak boleh lebih dari 50 karakter"
+  },
+  "password": {
+    "matches": "Password harus mengandung huruf besar, huruf kecil, angka, dan simbol",
+    "minLength": "Password minimal harus 8 huruf",
+    "maxLength": "Password tidak boleh lebih dari 20 karakter",
+    "isNotEmpty": "Password harus diisi"
+  },
+  "countyCode": {
+    "isNotEmpty": "Kode negara harus diisi"
+  },
+  "phoneNumber": {
+    "isNotEmpty": "Nomor handphone harus diisi",
+    "maxLength": "Nomor handphone tidak boleh lebih dari 17 angka"
+  },
+  "passwordConfirm": {
+    "match": "Password tidak sama"
+  },
+  "token": {
+    "isNotEmpty": "Token tidak boleh kosong"
+  },
+  "userId": {
+    "isNotEmpty": "User id is required"
+  }
+}

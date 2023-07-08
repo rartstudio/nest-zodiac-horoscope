@@ -1,0 +1,9 @@
+{
+  "notFound": "",
+  "forbidden": "Akses sumberdaya dibatasi",
+  "unauthorized": "Token tidak sah",
+  "unprocessableContent": "Data tidak dapat diproses",
+  "conflict": "Data Konflik",
+  "badRequest": "",
+  "internalServerError": "Internal server error"
+}
