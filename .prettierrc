@@ -7,7 +7,7 @@
       "files": "*.type.ts",
       "options": {
         "trailingComma": "all",
-        "semi": false,
+        "semi": false
       }
     }
   ]

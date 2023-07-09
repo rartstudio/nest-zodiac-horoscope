@@ -1,73 +1,44 @@
 import {
   Body,
+  ConflictException,
   Controller,
-  Get,
   HttpCode,
   HttpStatus,
   Post,
   UnprocessableEntityException,
-  UseGuards,
 } from '@nestjs/common';
 import {
-  ApiBearerAuth,
+  ApiConflictResponse,
+  ApiCreatedResponse,
   ApiHeader,
-  ApiNotFoundResponse,
   ApiOkResponse,
   ApiTags,
-  ApiUnauthorizedResponse,
   ApiUnprocessableEntityResponse,
 } from '@nestjs/swagger';
 import { TokenService } from '../token/token.service';
 import { UserService } from '../user/user.service';
-import { JwtRefreshAuthGuard } from '../auth/jwt-refresh-auth.guard';
-import { UserDecorator } from '../user/user.decorator';
-import { UserJWTPayload } from '../user/user-jwt.payload';
-import { UserExistGuard } from '../user/user-exist.guard';
-import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { UserPasswordService } from '../user/user-password.service';
-import { OtpDto } from './dto/otp.dto';
 import { LoginDto } from './dto/login.dto';
-import { UserSelected } from 'src/user/user-select.type';
+import { UserSelected } from 'src/user/user.type';
 import { I18nLang, I18nService } from 'nestjs-i18n';
 import { I18nTranslations } from 'src/i18n/generated/i18n.generated';
 import {
   BasicResponseError,
   BasicResponseSuccess,
+  FieldResponseError,
 } from 'src/response.interface';
+import { RegisterDto } from './dto/register.dto';
 
 @Controller({
   version: '1',
   path: 'auth',
 })
-@UseGuards(JwtAuthGuard, UserExistGuard)
 @ApiTags('auth')
 @ApiHeader({
   name: 'x-lang',
   schema: {
     example: ['id', 'en'],
     default: 'en',
-  },
-})
-@ApiUnauthorizedResponse({
-  schema: {
-    example: {
-      status: false,
-      error: {
-        code: HttpStatus.UNAUTHORIZED,
-        message: 'Error Message',
-      },
-    },
-  },
-})
-@ApiNotFoundResponse({
-  schema: {
-    example: {
-      status: false,
-      error: {
-        code: HttpStatus.NOT_FOUND,
-        message: 'Pengguna tidak terdaftar',
-      },
-    },
   },
 })
 export class AuthUserTokenController {
@@ -77,132 +48,6 @@ export class AuthUserTokenController {
     private tokenService: TokenService,
     private i18nService: I18nService<I18nTranslations>,
   ) {}
-
-  @Get('/refresh-token')
-  @ApiBearerAuth()
-  @HttpCode(HttpStatus.OK)
-  @ApiOkResponse({
-    schema: {
-      example: {
-        data: {
-          accessToken: 'some random string',
-          refreshToken: 'some random string',
-        },
-        status: true,
-        message: 'Success Message',
-      },
-    },
-  })
-  async refreshToken(
-    @UserDecorator() user: UserJWTPayload,
-    @I18nLang() lang: string,
-  ): Promise<BasicResponseSuccess | BasicResponseError> {
-    const result: UserSelected | null = await this.userService.findOneById(
-      user.id,
-    );
-
-    const accessToken = await this.tokenService.generateAccessToken(
-      result.id,
-      result.name,
-      result.emailVerifiedAt,
-    );
-    const refreshToken = await this.tokenService.generateRefreshToken(
-      result.id,
-      result.name,
-      result.emailVerifiedAt,
-    );
-
-    return {
-      data: {
-        accessToken,
-        refreshToken,
-      },
-      status: true,
-      message: this.i18nService.translate(
-        'response.auth.route.refreshToken.success',
-        {
-          lang,
-        },
-      ),
-    };
-  }
-
-  @Post('otp')
-  @ApiBearerAuth()
-  @HttpCode(HttpStatus.OK)
-  @ApiUnprocessableEntityResponse({
-    schema: {
-      example: {
-        status: false,
-        error: {
-          code: HttpStatus.UNPROCESSABLE_ENTITY,
-          message: `Error Message`,
-          field: {
-            otp: ['Error Message'],
-          },
-        },
-      },
-    },
-  })
-  @ApiOkResponse({
-    schema: {
-      example: {
-        data: {
-          accessToken: 'some random string',
-          refreshToken: 'some random string',
-          isEmailVerified: true,
-        },
-        status: true,
-        message: 'Success Message',
-      },
-    },
-  })
-  async otp(
-    @Body() otpDto: OtpDto,
-    @UserDecorator() user: UserJWTPayload,
-    @I18nLang() lang: string,
-  ): Promise<BasicResponseSuccess | BasicResponseError> {
-    // extract out dto
-    const { otp } = otpDto;
-
-    // check current user record
-    const userEmail: UserSelected = await this.userService.findOneById(user.id);
-
-    if (userEmail && userEmail.otp == otp) {
-      const result = await this.userService.updateActivateAccountUser(
-        userEmail.id,
-      );
-
-      const accessToken = await this.tokenService.generateAccessToken(
-        result.id,
-        result.name,
-        result.emailVerifiedAt,
-      );
-      const refreshToken = await this.tokenService.generateRefreshToken(
-        result.id,
-        result.name,
-        result.emailVerifiedAt,
-      );
-
-      return {
-        data: {
-          accessToken,
-          refreshToken,
-          isEmailVerified: result.emailVerifiedAt ? true : false,
-        },
-        status: true,
-        message: this.i18nService.translate('response.auth.route.otp.success', {
-          lang,
-        }),
-      };
-    } else {
-      throw new UnprocessableEntityException({
-        otp: this.i18nService.translate('response.auth.route.otp.error.otp', {
-          lang,
-        }),
-      });
-    }
-  }
 
   @Post('login')
   @HttpCode(HttpStatus.OK)
@@ -237,12 +82,10 @@ export class AuthUserTokenController {
     @I18nLang() lang: string,
   ): Promise<BasicResponseSuccess | BasicResponseError> {
     // extract out object from dto
-    const { username, password } = loginDto;
+    const { email, password } = loginDto;
 
     // get user
-    const user: UserSelected = await this.userService.findOneByUsername(
-      username,
-    );
+    const user: UserSelected = await this.userService.findOneByEmail(email);
 
     if (user) {
       // check user password
@@ -253,24 +96,18 @@ export class AuthUserTokenController {
 
       if (!validatedPassword) {
         throw new UnprocessableEntityException({
-          username: [
-            this.i18nService.translate('response.auth.route.otp.error.otp', {
-              lang,
-            }),
+          email: [
+            // this.i18nService.translate('response.auth.route.login.error.email', {
+            //   lang,
+            // }),
           ],
         });
       }
 
       // generate and return token
-      const accessToken = await this.tokenService.generateAccessToken(
-        user.id,
-        user.name,
-        user.emailVerifiedAt,
-      );
+      const accessToken = await this.tokenService.generateAccessToken(user.id);
       const refreshToken = await this.tokenService.generateRefreshToken(
         user.id,
-        user.name,
-        user.emailVerifiedAt,
       );
 
       return {
@@ -289,11 +126,104 @@ export class AuthUserTokenController {
     } else {
       throw new UnprocessableEntityException({
         username: [
-          this.i18nService.translate('response.auth.route.otp.error.otp', {
-            lang,
-          }),
+          // this.i18nService.translate('response.auth.route.login.error.email', {
+          //   lang,
+          // }),
         ],
       });
     }
+  }
+
+  @Post('register')
+  @HttpCode(201)
+  @ApiConflictResponse({
+    schema: {
+      example: {
+        status: false,
+        error: {
+          code: HttpStatus.CONFLICT,
+          message: `Error Message`,
+          field: {
+            username: [`Error Message`],
+            email: ['Error Message'],
+          },
+        },
+      },
+    },
+  })
+  @ApiCreatedResponse({
+    schema: {
+      example: {
+        data: {
+          accessToken: 'some random string',
+          refreshToken: 'some random string',
+          emailVerified: true,
+        },
+        status: true,
+        message: 'Success Message',
+      },
+    },
+  })
+  async register(
+    @Body() registerDto: RegisterDto,
+    @I18nLang() lang: string,
+  ): Promise<BasicResponseSuccess | FieldResponseError | BasicResponseError> {
+    // extract out object from dto
+    const { email, password, username } = registerDto;
+
+    // check username already exists
+    const userUserName = await this.userService.findOneByUsername(username);
+    if (userUserName) {
+      throw new ConflictException({
+        username: [
+          this.i18nService.translate(
+            'response.auth.route.register.error.username',
+            {
+              lang,
+            },
+          ),
+        ],
+      });
+    }
+
+    // check email already exists
+    const userEmail = await this.userService.findOneByEmail(email);
+    if (userEmail) {
+      throw new ConflictException({
+        email: [
+          this.i18nService.translate(
+            'response.auth.route.register.error.email',
+            {
+              lang,
+            },
+          ),
+        ],
+      });
+    }
+
+    // register user
+    const user: UserSelected = await this.userService.createUser(
+      email,
+      password,
+      username,
+    );
+
+    // generate and return token
+    const accessToken = await this.tokenService.generateAccessToken(user.id);
+    const refreshToken = await this.tokenService.generateRefreshToken(user.id);
+
+    return {
+      data: {
+        accessToken,
+        refreshToken,
+      },
+      status: true,
+      message: this.i18nService.translate(
+        'response.auth.route.register.success',
+        {
+          lang,
+        },
+      ),
+    };
   }
 }

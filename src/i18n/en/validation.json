@@ -5,7 +5,6 @@
     "maxLength": "Email can't more than 100 characters"
   },
   "username": {
-    "isString": "Username must be a text",
     "isNotEmpty": "Username must be valid",
     "maxLength": "Username can't more than 100 characters"
   },
@@ -19,24 +18,7 @@
     "maxLength": "Password cannot be more than 20 characters",
     "isNotEmpty": "Password is required"
   },
-  "countyCode": {
-    "isNotEmpty": "Country code is required"
-  },
-  "phoneNumber": {
-    "isNotEmpty": "Phone number is required",
-    "maxLength": "Phone number cannot be more than 17 digit"
-  },
   "passwordConfirm": {
     "match": "Password not same"
-  },
-  "token": {
-    "isNotEmpty": "Token is required"
-  },
-  "userId": {
-    "isNotEmpty": "User id is required"
-  },
-  "otp": {
-    "isNotEmpty": "OTP is required",
-    "minLength": "OTP must be six digit"
   }
 }

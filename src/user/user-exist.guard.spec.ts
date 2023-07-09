@@ -42,15 +42,9 @@ describe('UserExistGuard', () => {
   it('should allow access when the user exists', async () => {
     const mockUser: User = {
       id: 'dafsf-dfsafasf-asdfasdf',
-      name: 'testing',
       email: 'testing@gmail.com',
       username: 'testing',
       password: '1sgsfgdsgsdertse',
-      phoneNumber: '8281231221',
-      countryCode: '+62',
-      emailVerifiedAt: new Date('2021-06-19T18:30:00.000Z'),
-      otp: null,
-      tokenReset: null,
       createdAt: new Date('2021-06-19T18:00:00.000Z'),
       updatedAt: new Date('2021-06-19T18:00:00.000Z'),
     };

@@ -18,20 +18,7 @@
     "maxLength": "Password tidak boleh lebih dari 20 karakter",
     "isNotEmpty": "Password harus diisi"
   },
-  "countyCode": {
-    "isNotEmpty": "Kode negara harus diisi"
-  },
-  "phoneNumber": {
-    "isNotEmpty": "Nomor handphone harus diisi",
-    "maxLength": "Nomor handphone tidak boleh lebih dari 17 angka"
-  },
   "passwordConfirm": {
     "match": "Password tidak sama"
-  },
-  "token": {
-    "isNotEmpty": "Token tidak boleh kosong"
-  },
-  "userId": {
-    "isNotEmpty": "User id is required"
   }
 }

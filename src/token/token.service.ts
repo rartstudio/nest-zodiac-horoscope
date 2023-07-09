@@ -15,17 +15,10 @@ export class TokenService {
     return crypto.randomBytes(32).toString('hex');
   }
 
-  async generateAccessToken(
-    id: string,
-    name: string,
-    emailVerifiedAt: Date | null,
-  ): Promise<string> {
+  async generateAccessToken(id: string): Promise<string> {
     const payload: UserJWTPayload = {
       id,
-      name,
-      isEmailVerified: emailVerifiedAt ? true : false,
     };
-    console.log('from generated token');
     console.log(payload);
     return this.jwtService.signAsync(payload, {
       secret: this.configService.get('JWT_SECRET'),
@@ -33,15 +26,9 @@ export class TokenService {
     });
   }
 
-  async generateRefreshToken(
-    id: string,
-    name: string,
-    emailVerifiedAt: Date | null,
-  ): Promise<string> {
+  async generateRefreshToken(id: string): Promise<string> {
     const payload: UserJWTPayload = {
       id,
-      name,
-      isEmailVerified: emailVerifiedAt ? true : false,
     };
     return this.jwtService.signAsync(payload, {
       secret: this.configService.get('JWT_REFRESH_SECRET'),
