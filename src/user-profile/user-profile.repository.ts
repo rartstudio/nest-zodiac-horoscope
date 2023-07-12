@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { Prisma } from '@prisma/client';
 import { UserProfileSelected } from './user-profile.type';
@@ -42,7 +42,7 @@ export class UserProfileRepository {
   }
 
   async get(userId: string): Promise<UserProfileSelected> {
-    return await this.prismaService.userProfile.findUnique({
+    return await this.prismaService.userProfile.findFirst({
       where: {
         userId,
       },

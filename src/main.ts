@@ -11,6 +11,7 @@ import { HttpExceptionFilter } from './http-exception.filter';
 import { ConfigService } from '@nestjs/config';
 import { ValidationExceptionFactory } from './validation-exception.factory';
 import { I18nService } from 'nestjs-i18n';
+import { RepositoryExceptionFilter } from './repository-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -36,7 +37,10 @@ async function bootstrap() {
         ),
     }),
   );
-  app.useGlobalFilters(new HttpExceptionFilter(app.get(I18nService)));
+  app.useGlobalFilters(
+    new HttpExceptionFilter(app.get(I18nService)),
+    new RepositoryExceptionFilter(app.get(I18nService)),
+  );
   app.enableCors({
     methods: ['GET', 'PUT', 'POST', 'PATCH', 'DELETE'],
     origin: function (origin, callback) {

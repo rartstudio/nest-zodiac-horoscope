@@ -1,8 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, HttpStatus } from '@nestjs/common';
 import { UserProfileRepository } from './user-profile.repository';
 import { UserProfileDto } from './dto/user-profile.dto';
 import { Horoscope, Prisma, Zodiac } from '@prisma/client';
 import { UserProfileSelected } from './user-profile.type';
+import { RepositoryNotFoundException } from '../repository-not-found-exception';
 
 @Injectable()
 export class UserProfileService {
@@ -58,6 +59,14 @@ export class UserProfileService {
   }
 
   async get(userId: string): Promise<UserProfileSelected> {
-    return await this.userProfileRepository.get(userId);
+    const result = await this.userProfileRepository.get(userId);
+    if (result == null) {
+      throw new RepositoryNotFoundException(
+        'Profile Not Found',
+        HttpStatus.NOT_FOUND,
+      );
+    }
+
+    return result;
   }
 }

@@ -12,6 +12,7 @@ import {
   MaxFileSizeValidator,
   FileTypeValidator,
   UseInterceptors,
+  NotFoundException,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
