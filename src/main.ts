@@ -9,7 +9,6 @@ import {
 } from '@nestjs/common';
 import { HttpExceptionFilter } from './http-exception.filter';
 import { ConfigService } from '@nestjs/config';
-import * as cookieParser from 'cookie-parser';
 import { ValidationExceptionFactory } from './validation-exception.factory';
 import { I18nService } from 'nestjs-i18n';
 
@@ -48,14 +47,7 @@ async function bootstrap() {
       }
     },
   });
-  app.use(cookieParser());
-  app.setGlobalPrefix('api', {
-    exclude: [{ path: 'health', method: RequestMethod.GET }],
-  });
-  app.enableVersioning({
-    type: VersioningType.URI,
-  });
-
+  app.setGlobalPrefix('api');
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
 

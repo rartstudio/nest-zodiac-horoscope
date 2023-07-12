@@ -9,7 +9,6 @@ import { HttpModule } from '@nestjs/axios';
 import { PrismaModule } from './prisma/prisma.module';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
-import { HealthModule } from './health/health.module';
 import { AuthUserTokenModule } from './auth-user-token/auth-user-token.module';
 import { StorageModule } from './storage/storage.module';
 import { UserStorageModule } from './user-storage/user-storage.module';
@@ -52,7 +51,6 @@ import { UserProfileModule } from './user-profile/user-profile.module';
     PrismaModule,
     AuthModule,
     UserModule,
-    HealthModule,
     TokenModule,
     AuthUserTokenModule,
     StorageModule,

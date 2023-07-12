@@ -7,9 +7,16 @@ import {
   HttpStatus,
   Get,
   Post,
+  UploadedFile,
+  ParseFilePipe,
+  MaxFileSizeValidator,
+  FileTypeValidator,
+  UseInterceptors,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
+  ApiBody,
+  ApiConsumes,
   ApiForbiddenResponse,
   ApiHeader,
   ApiNotFoundResponse,
@@ -35,6 +42,8 @@ import { UserProfileDto } from './dto/user-profile.dto';
 import { HoroscopeService } from 'src/horoscope/horoscope.service';
 import { ZodiacService } from 'src/zodiac/zodiac.service';
 import { UserProfileSelected } from './user-profile.type';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { ConfigService } from '@nestjs/config';
 
 @Controller({
   version: '1',
@@ -87,6 +96,7 @@ export class UserProfileController {
     private i18nService: I18nService<I18nTranslations>,
     private horoscopeService: HoroscopeService,
     private zodiacService: ZodiacService,
+    private configService: ConfigService,
   ) {}
 
   @Get('getProfile')
@@ -113,8 +123,7 @@ export class UserProfileController {
   async getProfile(
     @UserDecorator() user: UserJWTPayload,
     @I18nLang() lang: string,
-    // ): Promise<BasicResponseSuccess | FieldResponseError | BasicResponseError> {
-  ) {
+  ): Promise<BasicResponseSuccess | FieldResponseError | BasicResponseError> {
     // get current user data
     const {
       userId,
@@ -140,17 +149,50 @@ export class UserProfileController {
       zodiac,
     });
 
-    // return {
-    //   data: responseDto,
-    //   status: true,
-    //   message: this.i18nService.translate('response.user.route.me.success', {
-    //     lang,
-    //   }),
-    // };
+    return {
+      data: responseDto,
+      status: true,
+      message: '',
+    };
   }
 
   @Post('createProfile')
   @HttpCode(HttpStatus.CREATED)
+  @UseInterceptors(FileInterceptor('image'))
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        name: {
+          type: 'string',
+          example: 'richard',
+        },
+        gender: {
+          type: 'string',
+        },
+        birthDate: {
+          type: 'string',
+        },
+        height: {
+          type: 'integer',
+        },
+        weight: {
+          type: 'integer',
+        },
+        profileUrl: {
+          type: 'string',
+          format: 'binary',
+        },
+        horoscope: {
+          type: 'string',
+        },
+        zodiac: {
+          type: 'string',
+        },
+      },
+    },
+  })
   @ApiOkResponse({
     schema: {
       example: {
@@ -174,8 +216,16 @@ export class UserProfileController {
     @UserDecorator() user: UserJWTPayload,
     @Body() userProfileDto: UserProfileDto,
     @I18nLang() lang: string,
-  ) {
-  // ): Promise<BasicResponseSuccess | FieldResponseError | BasicResponseError> {
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [
+          new MaxFileSizeValidator({ maxSize: 1000 }),
+          new FileTypeValidator({ fileType: 'image/jpeg' }),
+        ],
+      }),
+    )
+    image: Express.Multer.File,
+  ): Promise<BasicResponseSuccess | FieldResponseError | BasicResponseError> {
     const { birthDate } = userProfileDto;
     const horoscope: Horoscope = this.horoscopeService.checkHoroscope(
       new Date(birthDate),
@@ -201,13 +251,11 @@ export class UserProfileController {
       zodiac: profile.zodiac,
     });
 
-    // return {
-    //   data: responseDto,
-    //   status: true,
-    //   message: this.i18nService.translate('response.user.route.me.success', {
-    //     lang,
-    //   }),
-    // };
+    return {
+      data: responseDto,
+      status: true,
+      message: '',
+    };
   }
 
   @Patch('updateProfile')
@@ -235,8 +283,7 @@ export class UserProfileController {
     @UserDecorator() user: UserJWTPayload,
     @Body() userProfileDto: UserProfileDto,
     @I18nLang() lang: string,
-  // ): Promise<BasicResponseSuccess | FieldResponseError | BasicResponseError> {
-    ) {
+  ): Promise<BasicResponseSuccess | FieldResponseError | BasicResponseError> {
     const { birthDate } = userProfileDto;
     const horoscope: Horoscope = this.horoscopeService.checkHoroscope(
       new Date(birthDate),
@@ -262,12 +309,10 @@ export class UserProfileController {
       zodiac: profile.zodiac,
     });
 
-    // return {
-    //   data: responseDto,
-    //   status: true,
-    //   message: this.i18nService.translate('response.user.route.me.success', {
-    //     lang,
-    //   }),
-    // };
+    return {
+      data: responseDto,
+      status: true,
+      message: '',
+    };
   }
 }
