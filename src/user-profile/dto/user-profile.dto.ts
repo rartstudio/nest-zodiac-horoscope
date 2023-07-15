@@ -1,6 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Gender } from '@prisma/client';
-import { IsNotEmpty, MaxLength, IsDate, IsNumber } from 'class-validator';
+import { Transform } from 'class-transformer';
+import {
+  IsNotEmpty,
+  MaxLength,
+  IsDate,
+  IsNumber,
+  IsDateString,
+} from 'class-validator';
 
 export class UserProfileDto {
   @IsNotEmpty()
@@ -14,16 +21,22 @@ export class UserProfileDto {
 
   @IsNotEmpty()
   @ApiProperty()
-  @IsDate()
+  @IsDateString()
   public birthDate: string; // YYYY-MM-DD
 
   @IsNotEmpty()
   @ApiProperty()
+  @Transform(({ value }) => {
+    return Number(value);
+  })
   @IsNumber()
   public height: number;
 
   @IsNotEmpty()
   @ApiProperty()
+  @Transform(({ value }) => {
+    return Number(value);
+  })
   @IsNumber()
   public weight: number;
 

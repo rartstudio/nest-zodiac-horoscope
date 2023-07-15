@@ -20,5 +20,20 @@
   },
   "passwordConfirm": {
     "match": "Password not same"
+  },
+  "gender": {
+    "isNotEmpty": "Gender is required"
+  },
+  "birthDate": {
+    "isNotEmpty": "Birth Date is required",
+    "isDate": "Birth Date must be valid date"
+  },
+  "height": {
+    "isNotEmpty": "Height is required",
+    "isNumber": "Height must  be a number"
+  },
+  "weight": {
+    "isNotEmpty": "Birth Date is required",
+    "isNumber": "Height must  be a number"
   }
 }

@@ -1,24 +1,39 @@
 {
   "email": {
-    "isNotEmpty": "Email harus diisi",
-    "isEmail": "Email harus valid",
-    "maxLength": "Email tidak boleh lebih dari 100 karakter"
+    "isNotEmpty": "Email is required",
+    "isEmail": "Email must be valid",
+    "maxLength": "Email can't more than 100 characters"
   },
   "username": {
-    "isNotEmpty": "Nama pengguna harus diisi",
-    "maxLength": "Nama pengguna tidak boleh lebih dari 100 karakter"
+    "isNotEmpty": "Username must be valid",
+    "maxLength": "Username can't more than 100 characters"
   },
   "name": {
-    "isNotEmpty": "Nama harus diisi",
-    "maxLength": "Nama tidak boleh lebih dari 50 karakter"
+    "isNotEmpty": "Name is required",
+    "maxLength": "Name can't more than 50 characters"
   },
   "password": {
-    "matches": "Password harus mengandung huruf besar, huruf kecil, angka, dan simbol",
-    "minLength": "Password minimal harus 8 huruf",
-    "maxLength": "Password tidak boleh lebih dari 20 karakter",
-    "isNotEmpty": "Password harus diisi"
+    "matches": "Password must contain uppercase, lowercase, numbers and symbols",
+    "minLength": "Password must be at least 8 letters long",
+    "maxLength": "Password cannot be more than 20 characters",
+    "isNotEmpty": "Password is required"
   },
   "passwordConfirm": {
-    "match": "Password tidak sama"
+    "match": "Password not same"
+  },
+  "gender": {
+    "isNotEmpty": "Gender is required"
+  },
+  "birthDate": {
+    "isNotEmpty": "Birth Date is required",
+    "isDate": "Birth Date must be valid date"
+  },
+  "height": {
+    "isNotEmpty": "Height is required",
+    "isNumber": "Height must  be a number"
+  },
+  "weight": {
+    "isNotEmpty": "Birth Date is required",
+    "isNumber": "Height must  be a number"
   }
 }

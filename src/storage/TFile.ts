@@ -3,5 +3,6 @@ export type FileUpload = {
   mimetype: string;
   key: string;
   size: number;
-  location: string;
+  location: string; //using s3
+  filename: string; //disk storage
 };

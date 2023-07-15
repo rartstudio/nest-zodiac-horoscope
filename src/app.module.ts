@@ -1,7 +1,7 @@
 import { ClassSerializerInterceptor, Module } from '@nestjs/common';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { ValidationExceptionFactory } from './validation-exception.factory';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import * as Joi from 'joi';
 import { HeaderResolver, I18nModule } from 'nestjs-i18n';
 import { join } from 'path';
@@ -11,11 +11,14 @@ import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { AuthUserTokenModule } from './auth-user-token/auth-user-token.module';
 import { StorageModule } from './storage/storage.module';
-import { UserStorageModule } from './user-storage/user-storage.module';
 import { TokenModule } from './token/token.module';
 import { HoroscopeModule } from './horoscope/horoscope.module';
 import { ZodiacModule } from './zodiac/zodiac.module';
 import { UserProfileModule } from './user-profile/user-profile.module';
+import {
+  ServeStaticModule,
+  ServeStaticModuleOptions,
+} from '@nestjs/serve-static';
 
 @Module({
   imports: [
@@ -30,6 +33,19 @@ import { UserProfileModule } from './user-profile/user-profile.module';
         JWT_REFRESH_SECRET: Joi.string().required(),
       }),
     }),
+    // ServeStaticModule.forRootAsync({
+    //   useFactory: async (
+    //     configService: ConfigService,
+    //   ): Promise<ServeStaticModuleOptions> => {
+    //     return {
+    //       rootPath: join(
+    //         __dirname,
+    //         '..',
+    //         configService.get('PATH_IMAGE_PUBLIC'),
+    //       ),
+    //     };
+    //   },
+    // }),
     I18nModule.forRoot({
       logging: true,
       fallbackLanguage: 'en',
@@ -54,7 +70,6 @@ import { UserProfileModule } from './user-profile/user-profile.module';
     TokenModule,
     AuthUserTokenModule,
     StorageModule,
-    UserStorageModule,
     HoroscopeModule,
     ZodiacModule,
     UserProfileModule,

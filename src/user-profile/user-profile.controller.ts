@@ -12,13 +12,14 @@ import {
   MaxFileSizeValidator,
   FileTypeValidator,
   UseInterceptors,
+  ConflictException,
   NotFoundException,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiBody,
+  ApiConflictResponse,
   ApiConsumes,
-  ApiForbiddenResponse,
   ApiHeader,
   ApiNotFoundResponse,
   ApiOkResponse,
@@ -38,30 +39,20 @@ import { I18nLang, I18nService } from 'nestjs-i18n';
 import { I18nTranslations } from 'src/i18n/generated/i18n.generated';
 import { UserProfileResponse } from './response/user-profile.response';
 import { UserProfileService } from './user-profile.service';
-import { Horoscope, Zodiac } from '@prisma/client';
+import { Gender, Horoscope, Zodiac } from '@prisma/client';
 import { UserProfileDto } from './dto/user-profile.dto';
 import { HoroscopeService } from 'src/horoscope/horoscope.service';
 import { ZodiacService } from 'src/zodiac/zodiac.service';
 import { UserProfileSelected } from './user-profile.type';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ConfigService } from '@nestjs/config';
+import { FileUpload } from '../storage/TFile';
 
 @Controller({
   version: '1',
 })
 @ApiTags('users')
 @UseGuards(JwtAuthGuard, UserExistGuard)
-@ApiForbiddenResponse({
-  schema: {
-    example: {
-      status: false,
-      error: {
-        code: HttpStatus.FORBIDDEN,
-        message: 'Error Message',
-      },
-    } as BasicResponseError,
-  },
-})
 @ApiUnauthorizedResponse({
   schema: {
     example: {
@@ -95,8 +86,6 @@ export class UserProfileController {
   constructor(
     private userProfileService: UserProfileService,
     private i18nService: I18nService<I18nTranslations>,
-    private horoscopeService: HoroscopeService,
-    private zodiacService: ZodiacService,
     private configService: ConfigService,
   ) {}
 
@@ -145,7 +134,9 @@ export class UserProfileController {
       birthDate: birthdate,
       height,
       weight,
-      profileUrl,
+      profileUrl: `${this.configService.get('APP_URL')}${this.configService.get(
+        'PATH_IMAGE_PUBLIC',
+      )}/${profileUrl}`,
       horoscope,
       zodiac,
     });
@@ -171,27 +162,50 @@ export class UserProfileController {
         },
         gender: {
           type: 'string',
+          example: Gender.MALE,
         },
         birthDate: {
           type: 'string',
+          example: '1993-08-07',
         },
         height: {
           type: 'integer',
+          example: 168,
         },
         weight: {
           type: 'integer',
+          example: 68,
         },
-        profileUrl: {
+        image: {
           type: 'string',
           format: 'binary',
         },
         horoscope: {
           type: 'string',
+          example: Horoscope.AQUARIUS,
         },
         zodiac: {
           type: 'string',
+          example: Zodiac.DOG,
         },
       },
+    },
+  })
+  //   {
+  //     "email": "rudi2@gmail.com",
+  //     "username": "rudi2",
+  //     "password": "ruDIDI2@",
+  //     "passwordConfirm": "ruDIDI2@"
+  //   }
+  @ApiConflictResponse({
+    schema: {
+      example: {
+        status: false,
+        error: {
+          code: HttpStatus.CONFLICT,
+          message: 'Error Message',
+        },
+      } as BasicResponseError,
     },
   })
   @ApiOkResponse({
@@ -220,25 +234,21 @@ export class UserProfileController {
     @UploadedFile(
       new ParseFilePipe({
         validators: [
-          new MaxFileSizeValidator({ maxSize: 1000 }),
-          new FileTypeValidator({ fileType: 'image/jpeg' }),
+          new MaxFileSizeValidator({ maxSize: 1000000 * 5 }), //max 5mb,
+          new FileTypeValidator({ fileType: RegExp(/.(jpg|jpeg|png)$/) }),
         ],
       }),
     )
-    image: Express.Multer.File,
+    image: FileUpload,
   ): Promise<BasicResponseSuccess | FieldResponseError | BasicResponseError> {
-    const { birthDate } = userProfileDto;
-    const horoscope: Horoscope = this.horoscopeService.checkHoroscope(
-      new Date(birthDate),
-    );
-    const zodiac: Zodiac = this.zodiacService.checkZodiac(
-      parseInt(birthDate.substring(0, 4)),
-    );
+    const userProfle = await this.userProfileService.get(user.id);
+    if (userProfle) {
+      throw new ConflictException('User Profile Already Exist');
+    }
     const profile: UserProfileSelected = await this.userProfileService.create(
       userProfileDto,
       user.id,
-      horoscope,
-      zodiac,
+      image,
     );
     const responseDto: UserProfileResponse = new UserProfileResponse({
       userId: profile.userId,
@@ -247,7 +257,9 @@ export class UserProfileController {
       birthDate: profile.birthdate,
       height: profile.height,
       weight: profile.weight,
-      profileUrl: profile.profileUrl,
+      profileUrl: `${this.configService.get('APP_URL')}${this.configService.get(
+        'PATH_IMAGE_PUBLIC',
+      )}/${profile.profileUrl}`,
       horoscope: profile.horoscope,
       zodiac: profile.zodiac,
     });
@@ -261,6 +273,47 @@ export class UserProfileController {
 
   @Patch('updateProfile')
   @HttpCode(HttpStatus.OK)
+  @UseInterceptors(FileInterceptor('image'))
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        name: {
+          type: 'string',
+          example: 'richard',
+        },
+        gender: {
+          type: 'string',
+          example: Gender.MALE,
+        },
+        birthDate: {
+          type: 'string',
+          example: '1993-08-07',
+        },
+        height: {
+          type: 'integer',
+          example: 168,
+        },
+        weight: {
+          type: 'integer',
+          example: 68,
+        },
+        image: {
+          type: 'string',
+          format: 'binary',
+        },
+        horoscope: {
+          type: 'string',
+          example: Horoscope.AQUARIUS,
+        },
+        zodiac: {
+          type: 'string',
+          example: Zodiac.DOG,
+        },
+      },
+    },
+  })
   @ApiOkResponse({
     schema: {
       example: {
@@ -284,19 +337,24 @@ export class UserProfileController {
     @UserDecorator() user: UserJWTPayload,
     @Body() userProfileDto: UserProfileDto,
     @I18nLang() lang: string,
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [
+          new MaxFileSizeValidator({ maxSize: 1000000 * 5 }), //max 5mb
+          new FileTypeValidator({ fileType: RegExp(/.(jpg|jpeg|png)$/) }),
+        ],
+      }),
+    )
+    image: FileUpload,
   ): Promise<BasicResponseSuccess | FieldResponseError | BasicResponseError> {
-    const { birthDate } = userProfileDto;
-    const horoscope: Horoscope = this.horoscopeService.checkHoroscope(
-      new Date(birthDate),
-    );
-    const zodiac: Zodiac = this.zodiacService.checkZodiac(
-      parseInt(birthDate.substring(0, 4)),
-    );
+    const userProfle = await this.userProfileService.get(user.id);
+    if (userProfle == null) {
+      throw new NotFoundException(`User Profile doesn't exist`);
+    }
     const profile: UserProfileSelected = await this.userProfileService.update(
       userProfileDto,
       user.id,
-      horoscope,
-      zodiac,
+      image,
     );
     const responseDto: UserProfileResponse = new UserProfileResponse({
       userId: profile.userId,
@@ -305,7 +363,9 @@ export class UserProfileController {
       birthDate: profile.birthdate,
       height: profile.height,
       weight: profile.weight,
-      profileUrl: profile.profileUrl,
+      profileUrl: `${this.configService.get('APP_URL')}${this.configService.get(
+        'PATH_IMAGE_PUBLIC',
+      )}/${profile.profileUrl}`,
       horoscope: profile.horoscope,
       zodiac: profile.zodiac,
     });

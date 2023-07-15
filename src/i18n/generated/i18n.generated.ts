@@ -156,6 +156,21 @@ export type I18nTranslations = {
         "passwordConfirm": {
             "match": string;
         };
+        "gender": {
+            "isNotEmpty": string;
+        };
+        "birthDate": {
+            "isNotEmpty": string;
+            "isDate": string;
+        };
+        "height": {
+            "isNotEmpty": string;
+            "isNumber": string;
+        };
+        "weight": {
+            "isNotEmpty": string;
+            "isNumber": string;
+        };
     };
 };
 export type I18nPath = Path<I18nTranslations>;
