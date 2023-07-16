@@ -14,6 +14,7 @@ import {
   UseInterceptors,
   ConflictException,
   NotFoundException,
+  BadRequestException,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -144,7 +145,12 @@ export class UserProfileController {
     return {
       data: responseDto,
       status: true,
-      message: '',
+      message: this.i18nService.translate(
+        'response.user.route.getProfile.success',
+        {
+          lang,
+        },
+      ),
     };
   }
 
@@ -197,6 +203,13 @@ export class UserProfileController {
   //     "password": "ruDIDI2@",
   //     "passwordConfirm": "ruDIDI2@"
   //   }
+
+  //   {
+  //     "email": "rudibonus3@gmail.com",
+  //     "username": "rudibonus3",
+  //     "password": "ruDIDI02@",
+  //     "passwordConfirm": "ruDIDI02@"
+  //   }
   @ApiConflictResponse({
     schema: {
       example: {
@@ -204,8 +217,9 @@ export class UserProfileController {
         error: {
           code: HttpStatus.CONFLICT,
           message: 'Error Message',
+          field: {},
         },
-      } as BasicResponseError,
+      } as FieldResponseError,
     },
   })
   @ApiOkResponse({
@@ -243,7 +257,14 @@ export class UserProfileController {
   ): Promise<BasicResponseSuccess | FieldResponseError | BasicResponseError> {
     const userProfle = await this.userProfileService.get(user.id);
     if (userProfle) {
-      throw new ConflictException('User Profile Already Exist');
+      throw new BadRequestException(
+        this.i18nService.translate(
+          'response.user.route.createProfile.error.alreadyExist',
+          {
+            lang,
+          },
+        ),
+      );
     }
     const profile: UserProfileSelected = await this.userProfileService.create(
       userProfileDto,
@@ -267,7 +288,12 @@ export class UserProfileController {
     return {
       data: responseDto,
       status: true,
-      message: '',
+      message: this.i18nService.translate(
+        'response.user.route.createProfile.success',
+        {
+          lang,
+        },
+      ),
     };
   }
 
@@ -349,7 +375,14 @@ export class UserProfileController {
   ): Promise<BasicResponseSuccess | FieldResponseError | BasicResponseError> {
     const userProfle = await this.userProfileService.get(user.id);
     if (userProfle == null) {
-      throw new NotFoundException(`User Profile doesn't exist`);
+      throw new BadRequestException(
+        this.i18nService.translate(
+          'response.user.route.updateProfile.error.notFound',
+          {
+            lang,
+          },
+        ),
+      );
     }
     const profile: UserProfileSelected = await this.userProfileService.update(
       userProfileDto,
@@ -373,7 +406,12 @@ export class UserProfileController {
     return {
       data: responseDto,
       status: true,
-      message: '',
+      message: this.i18nService.translate(
+        'response.user.route.updateProfile.success',
+        {
+          lang,
+        },
+      ),
     };
   }
 }

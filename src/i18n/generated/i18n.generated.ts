@@ -14,18 +14,6 @@ export type I18nTranslations = {
     "response": {
         "auth": {
             "route": {
-                "verifyResetPassword": {
-                    "success": string;
-                    "error": {
-                        "global": string;
-                    };
-                };
-                "resetPassword": {
-                    "success": string;
-                };
-                "refreshToken": {
-                    "success": string;
-                };
                 "register": {
                     "success": string;
                     "error": {
@@ -33,44 +21,10 @@ export type I18nTranslations = {
                         "email": string;
                     };
                 };
-                "otp": {
-                    "success": {
-                        "get": string;
-                        "post": string;
-                    };
-                    "error": {
-                        "otp": string;
-                    };
-                };
                 "login": {
                     "success": string;
                     "error": {
-                        "username": string;
                         "email": string;
-                    };
-                };
-                "forgotPassword": {
-                    "success": string;
-                    "error": {
-                        "email": string;
-                    };
-                };
-            };
-        };
-        "posts": {
-            "guard": {
-                "exist": string;
-            };
-            "route": {
-                "all": {
-                    "success": {
-                        "get": string;
-                        "post": string;
-                    };
-                };
-                "detail": {
-                    "success": {
-                        "get": string;
                     };
                 };
             };
@@ -78,57 +32,22 @@ export type I18nTranslations = {
         "user": {
             "guard": {
                 "exist": string;
-                "userPostExist": string;
-                "userPostCommentExist": string;
-                "userPostLikeUnique": string;
             };
             "route": {
-                "posts": {
-                    "success": {
-                        "get": string;
-                    };
-                };
-                "postsLike": {
+                "getProfile": {
                     "success": string;
                 };
-                "postsDislike": {
-                    "success": string;
-                };
-                "postsComments": {
-                    "success": string;
-                };
-                "postsCommentsDetail": {
-                    "success": {
-                        "delete": string;
-                    };
-                };
-                "email": {
+                "createProfile": {
                     "success": string;
                     "error": {
-                        "otp": string;
-                        "email": string;
+                        "alreadyExist": string;
                     };
                 };
-                "password": {
+                "updateProfile": {
                     "success": string;
                     "error": {
-                        "currentPassword": string;
+                        "notFound": string;
                     };
-                };
-                "attachment": {
-                    "success": string;
-                };
-                "changeEmailOtp": {
-                    "success": string;
-                    "error": {
-                        "email": string;
-                    };
-                };
-                "me": {
-                    "success": string;
-                };
-                "profile": {
-                    "success": string;
                 };
             };
         };

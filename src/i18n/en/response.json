@@ -1,123 +1,41 @@
 {
   "auth": {
     "route": {
-      "verifyResetPassword": {
-        "success": "Reset password token is verified",
-        "error": {
-          "global": "Reset password token is not valid"
-        }
-      },
-      "resetPassword": {
-        "success": "Success reset password"
-      },
-      "refreshToken": {
-        "success": "Success refresh token"
-      },
       "register": {
         "success": "Registration Success",
         "error": {
           "username": "Username already exist",
-          "email":"Email already exist"
-        }
-      },
-      "otp": {
-        "success": {
-          "get": "Success resend otp",
-          "post": "Account is verified"
-        },
-        "error": {
-          "otp": "OTP not valid"
+          "email": "Email already exist"
         }
       },
       "login": {
         "success": "Success Login",
         "error": {
-          "username": "Username or Password doesn't match"
-        }
-      },
-      "forgotPassword": {
-        "success": "Success send email reset password",
-        "error": {
-          "email": "Email not registered"
-        }
-      }
-    }
-  },
-  "posts": {
-    "guard": {
-      "exist": "Post not found"
-    },
-    "route": {
-      "all": {
-        "success": {
-          "get": "Success get all post",
-          "post": "Success add post"
-        }
-      },
-      "detail": {
-        "success": {
-          "get": "Success get detail post"
+          "email": "Email or Password doesn't match"
         }
       }
     }
   },
   "user": {
     "guard": {
-      "exist": "User not registered",
-      "userPostExist": "User post's not found",
-      "userPostCommentExist": "User comment on post not found",
-      "userPostLikeUnique": "User like on post only each per post"
+      "exist": "User not registered"
     },
     "route": {
-      "posts": {
-        "success": {
-          "get": "Success get user post"
-        }
+      "getProfile": {
+        "success": "Success get user profile"
       },
-      "postsLike": {
-        "success": "Success add like on post"
-      },
-      "postsDislike": {
-        "success": "Success delete like on post"
-      },
-      "postsComments": {
-        "success": {
-          "get": "Success add comment on post"
-        }
-      },
-      "postsCommentsDetail": {
-        "success": {
-          "delete": "Success delete comment on post"
-        }
-      },
-      "email": {
-        "success": "Success change user email",
+      "createProfile": {
+        "success": "Success create user profile",
         "error": {
-          "otp" : "OTP not valid",
-          "email": "Email already registered"
+          "alreadyExist": "User profile already exist"
         }
       },
-      "password": {
-        "success": "Sukses mengubah password pengguna",
+      "updateProfile": {
+        "success": "Success update user profile",
         "error": {
-          "currentPassword": "Password sebelumnya tidak sama"
+          "notFound": "User profile doesn't exist"
         }
-      },
-      "attachment": {
-        "success": "Success update user profile image"
-      },
-      "changeEmailOtp": {
-        "success": "Success sending otp change email",
-        "error": {
-          "email": "Email already registered"
-        }
-      },
-      "me": {
-        "success": "Success get user data"
-      },
-      "profile": {
-        "success": "Success update user profile"
       }
     }
-  } 
+  }
 }

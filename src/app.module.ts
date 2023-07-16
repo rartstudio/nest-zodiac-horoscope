@@ -33,19 +33,10 @@ import {
         JWT_REFRESH_SECRET: Joi.string().required(),
       }),
     }),
-    // ServeStaticModule.forRootAsync({
-    //   useFactory: async (
-    //     configService: ConfigService,
-    //   ): Promise<ServeStaticModuleOptions> => {
-    //     return {
-    //       rootPath: join(
-    //         __dirname,
-    //         '..',
-    //         configService.get('PATH_IMAGE_PUBLIC'),
-    //       ),
-    //     };
-    //   },
-    // }),
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'public'),
+      serveRoot: '/public/',
+    }),
     I18nModule.forRoot({
       logging: true,
       fallbackLanguage: 'en',

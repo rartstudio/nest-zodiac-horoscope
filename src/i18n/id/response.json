@@ -2,72 +2,40 @@
   "auth": {
     "route": {
       "register": {
-        "success": "Sukses Registrasi",
+        "success": "Registration Success",
         "error": {
-          "username": "Username sudah digunakan",
-          "email":"Email sudah terdaftar"
+          "username": "Username already exist",
+          "email": "Email already exist"
         }
       },
       "login": {
-        "success": "Login Sukses",
+        "success": "Success Login",
         "error": {
-          "email": "Username atau Password tidak cocok"
+          "email": "Email or Password doesn't match"
         }
       }
     }
   },
   "user": {
     "guard": {
-      "exist": "Pengguna tidak terdaftar"
+      "exist": "User not registered"
     },
     "route": {
-      "posts": {
-        "success": {
-          "get": "Sukses mengambil post pengguna"
-        }
+      "getProfile": {
+        "success": "Success get user profile"
       },
-      "postsLike": {
-        "success": "Sukses menambahkan like pada post"
-      },
-      "postsDislike": {
-        "success": "Sukses menghapus like pada post"
-      },
-      "postsComments": {
-        "success": "Sukses menambahkan komen pada post"
-      },
-      "postsCommentsDetail": {
-        "success": {
-          "delete": "Sukses menghapus komen pada post"
-        }
-      },
-      "email": {
-        "success": "Sukses mengganti email pengguna",
+      "createProfile": {
+        "success": "Success create user profile",
         "error": {
-          "otp" : "OTP tidak sah",
-          "email": "Email sudah terdaftar"
+          "alreadyExist": "User profile already exist"
         }
       },
-      "password": {
-        "success": "Sukses mengubah password pengguna",
+      "updateProfile": {
+        "success": "Success update user profile",
         "error": {
-          "currentPassword": "Password sebelumnya tidak sama"
+          "notFound": "User profile doesn't exist"
         }
-      },
-      "attachment": {
-        "success": "Sukses mengubah foto profil pengguna"
-      },
-      "changeEmailOtp": {
-        "success": "Sukses mengirim otp mengganti email",
-        "error": {
-          "email": "Email sudah terdaftar"
-        }
-      },
-      "me": {
-        "success": "Sukses mengambil data pengguna"
-      },
-      "profile": {
-        "success": "Sukses mengubah profil pengguna"
       }
     }
-  } 
+  }
 }

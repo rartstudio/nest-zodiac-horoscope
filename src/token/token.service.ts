@@ -19,7 +19,6 @@ export class TokenService {
     const payload: UserJWTPayload = {
       id,
     };
-    console.log(payload);
     return this.jwtService.signAsync(payload, {
       secret: this.configService.get('JWT_SECRET'),
       expiresIn: this.configService.get('JWT_EXPIRATION_TIME'),

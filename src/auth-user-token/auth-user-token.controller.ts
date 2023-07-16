@@ -29,10 +29,7 @@ import {
 } from 'src/response.interface';
 import { RegisterDto } from './dto/register.dto';
 
-@Controller({
-  version: '1',
-  path: 'auth',
-})
+@Controller()
 @ApiTags('auth')
 @ApiHeader({
   name: 'x-lang',
@@ -59,7 +56,7 @@ export class AuthUserTokenController {
           code: HttpStatus.UNPROCESSABLE_ENTITY,
           message: `Error Message`,
           field: {
-            username: ['Error Message'],
+            email: ['Error Message'],
           },
         },
       },
@@ -97,9 +94,12 @@ export class AuthUserTokenController {
       if (!validatedPassword) {
         throw new UnprocessableEntityException({
           email: [
-            // this.i18nService.translate('response.auth.route.login.error.email', {
-            //   lang,
-            // }),
+            this.i18nService.translate(
+              'response.auth.route.login.error.email',
+              {
+                lang,
+              },
+            ),
           ],
         });
       }
@@ -125,10 +125,10 @@ export class AuthUserTokenController {
       };
     } else {
       throw new UnprocessableEntityException({
-        username: [
-          // this.i18nService.translate('response.auth.route.login.error.email', {
-          //   lang,
-          // }),
+        email: [
+          this.i18nService.translate('response.auth.route.login.error.email', {
+            lang,
+          }),
         ],
       });
     }
