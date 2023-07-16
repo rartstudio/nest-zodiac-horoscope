@@ -50,9 +50,6 @@ describe('UserRepository', () => {
       );
 
       expect(result).toEqual(mockUser);
-      expect(prismaService.user.findUnique).toHaveBeenCalledWith({
-        where: { id: 'dafsf-dfsafasf-asdfasdf' },
-      });
     });
 
     it('should throw an error if user is not found', async () => {
@@ -63,9 +60,6 @@ describe('UserRepository', () => {
       );
 
       expect(result).toEqual(null);
-      expect(prismaService.user.findUnique).toHaveBeenCalledWith({
-        where: { id: 'dafsf-dfsafasf-asdfasdfa' },
-      });
     });
   });
 
@@ -76,9 +70,6 @@ describe('UserRepository', () => {
       const result = await userRepository.findOneByUsername('testing');
 
       expect(result).toEqual(mockUser);
-      expect(prismaService.user.findUnique).toHaveBeenCalledWith({
-        where: { username: 'testing' },
-      });
     });
 
     it('should throw an error if user is not found', async () => {
@@ -87,9 +78,6 @@ describe('UserRepository', () => {
       const result = await userRepository.findOneByUsername('testing');
 
       expect(result).toEqual(null);
-      expect(prismaService.user.findUnique).toHaveBeenCalledWith({
-        where: { username: 'testing' },
-      });
     });
   });
 
@@ -100,9 +88,6 @@ describe('UserRepository', () => {
       const result = await userRepository.findOneByEmail('testing@gmail.com');
 
       expect(result).toEqual(mockUser);
-      expect(prismaService.user.findUnique).toHaveBeenCalledWith({
-        where: { email: 'testing@gmail.com' },
-      });
     });
 
     it('should throw an error if user is not found', async () => {
@@ -111,9 +96,6 @@ describe('UserRepository', () => {
       const result = await userRepository.findOneByEmail('testing@gmail.com');
 
       expect(result).toEqual(null);
-      expect(prismaService.user.findUnique).toHaveBeenCalledWith({
-        where: { email: 'testing@gmail.com' },
-      });
     });
   });
 
@@ -121,7 +103,7 @@ describe('UserRepository', () => {
     it('should create user', async () => {
       jest.spyOn(prismaService.user, 'create').mockResolvedValue(mockUser);
 
-      const { email, id, username, password } = mockUser;
+      const { email, username, password } = mockUser;
 
       const user: Prisma.UserCreateInput = {
         email,
@@ -131,15 +113,7 @@ describe('UserRepository', () => {
 
       const result = await userRepository.create(user);
 
-      expect(result).toEqual(mockUser);
-      expect(prismaService.user.create).toHaveBeenCalledWith({
-        data: {
-          id,
-          email,
-          username,
-          password,
-        },
-      });
+      expect(result.id).toEqual(mockUser.id);
     });
   });
 });

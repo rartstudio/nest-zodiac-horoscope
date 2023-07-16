@@ -33,9 +33,8 @@ export class UserProfileService {
 
     const date = this.convertToDateObj(birthDate);
 
-    const horoscope: Horoscope = this.horoscopeService.checkHoroscope(
-      new Date(birthDate),
-    );
+    const horoscope: Horoscope =
+      this.horoscopeService.checkHoroscope(birthDate);
 
     const zodiac: Zodiac = this.zodiacService.checkZodiac(
       parseInt(birthDate.substring(0, 4)),
@@ -69,9 +68,8 @@ export class UserProfileService {
 
     const date = this.convertToDateObj(birthDate);
 
-    const horoscope: Horoscope = this.horoscopeService.checkHoroscope(
-      new Date(birthDate),
-    );
+    const horoscope: Horoscope =
+      this.horoscopeService.checkHoroscope(birthDate);
     const zodiac: Zodiac = this.zodiacService.checkZodiac(
       parseInt(birthDate.substring(0, 4)),
     );

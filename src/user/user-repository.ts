@@ -23,12 +23,7 @@ export class UserRepository {
     });
   }
 
-  async findOneById(id: string): Promise<{
-    id: string;
-    username: string;
-    email: string;
-    password: string;
-  }> {
+  async findOneById(id: string): Promise<UserSelected> {
     return await this.prismaService.user.findUnique({
       where: { id },
       ...this.selectedData,

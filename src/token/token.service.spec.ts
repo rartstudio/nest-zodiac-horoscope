@@ -37,8 +37,6 @@ describe('TokenService', () => {
   it('should return generated access token', async () => {
     const result: string = await service.generateAccessToken(
       'asdasd-asdasd-asdasd',
-      'testing',
-      new Date(),
     );
     expect(result).toBeTruthy();
   });
@@ -46,8 +44,6 @@ describe('TokenService', () => {
   it('should return generated refresh token', async () => {
     const result: string = await service.generateRefreshToken(
       'asdasd-asdasd-asdasd',
-      'testing',
-      new Date(),
     );
     expect(result).toBeTruthy();
   });
